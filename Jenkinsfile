@@ -5,6 +5,8 @@ pipeline {
 
     environment {
         SLACK_SCINAPSE_FEEDBACK_WEBHOOK_URL = credentials('SLACK_SCINAPSE_FEEDBACK_WEBHOOK_URL')
+        GOOGLE_SHEET_CLIENT_EMAIL= credentials("GOOGLE_SHEET_CLIENT_EMAIL")
+        GOOGLE_SHEET_PRIVATE_KEY= credentials("GOOGLE_SHEET_PRIVATE_KEY")
     }
 
     stages {
