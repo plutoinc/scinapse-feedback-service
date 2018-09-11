@@ -1,0 +1,25 @@
+{
+  "name": "scinapse-feedback",
+  "version": "1.0.0",
+  "description": "",
+  "dependencies": {},
+  "devDependencies": {
+    "@types/node": "^10.9.4",
+    "serverless": "^1.30.3",
+    "serverless-plugin-typescript": "^1.1.5",
+    "typescript": "^3.0.3"
+  },
+  "scripts": {
+    "deploy": "serverless deploy -s prod"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pluto-net/scinapse-feedback-service.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/pluto-net/scinapse-feedback-service/issues"
+  },
+  "homepage": "https://github.com/pluto-net/scinapse-feedback-service#readme"
+}
