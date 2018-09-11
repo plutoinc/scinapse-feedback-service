@@ -8,6 +8,8 @@ provider:
   runtime: nodejs8.10
   memorySize: 128
   region: us-east-1
+  environment:
+    SLACK_TOKEN: ${env:SLACK_TOKEN}
 
 functions:
   handleFeedback:

@@ -3,6 +3,10 @@ pipeline {
 
     tools {nodejs "Node810"}
 
+    environment {
+        SLACK_TOKEN = credentials('SLACK_TOKEN')
+    }
+
     stages {
         stage('Checkout') {
             steps {
