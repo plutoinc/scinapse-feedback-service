@@ -9,7 +9,7 @@ provider:
   memorySize: 128
   region: us-east-1
   environment:
-    SLACK_TOKEN: ${env:SLACK_TOKEN}
+    SLACK_SCINAPSE_FEEDBACK_WEBHOOK_URL: ${env:SLACK_SCINAPSE_FEEDBACK_WEBHOOK_URL}
 
 functions:
   handleFeedback:

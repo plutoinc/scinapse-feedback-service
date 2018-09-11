@@ -4,7 +4,7 @@ pipeline {
     tools {nodejs "Node810"}
 
     environment {
-        SLACK_TOKEN = credentials('SLACK_TOKEN')
+        SLACK_SCINAPSE_FEEDBACK_WEBHOOK_URL = credentials('SLACK_SCINAPSE_FEEDBACK_WEBHOOK_URL')
     }
 
     stages {

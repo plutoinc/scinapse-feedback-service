@@ -2,7 +2,9 @@
   "name": "scinapse-feedback",
   "version": "1.0.0",
   "description": "",
-  "dependencies": {},
+  "dependencies": {
+    "axios": "^0.18.0"
+  },
   "devDependencies": {
     "@types/node": "^10.9.4",
     "serverless": "^1.30.3",
