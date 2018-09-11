@@ -6,9 +6,13 @@ plugins:
 provider:
   name: aws
   runtime: nodejs8.10
-#  stage: dev
-#  region: us-east-1
+  memorySize: 128
+  region: us-east-1
 
 functions:
   handleFeedback:
     handler: handler.handleFeedback
+    events:
+      - http:
+          path: feedbacks/new
+          method: post
