@@ -20,3 +20,4 @@ functions:
       - http:
           path: feedbacks/new
           method: post
+          cors: true

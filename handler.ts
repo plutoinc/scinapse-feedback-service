@@ -35,12 +35,11 @@ export async function handleFeedback(event, context, callback) {
 
   try {
     await axios.post(SLACK_SCINAPSE_FEEDBACK_WEBHOOK_URL, {
-      text: feedbackTicket.content,
+      text: feedbackTicket.content
     });
   } catch (err) {
     console.error(err);
   }
-
 
   const jwtClient = new JWT({
     email: GOOGLE_SHEET_CLIENT_EMAIL,
