@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "dependencies": {
-    "@pluto_network/scinapse-feedback": "0.0.1",
+    "@pluto_network/scinapse-feedback": "0.0.2",
     "axios": "^0.18.0",
     "google-auth-library": "^2.0.0",
     "googleapis": "^27.0.0",

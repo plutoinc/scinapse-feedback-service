@@ -4,17 +4,28 @@ import { google } from "googleapis";
 import { JWT } from "google-auth-library";
 import { rejects } from "assert";
 import { resolve } from "path";
+import { FeedbackTicket } from "@pluto_network/scinapse-feedback";
+
+const SLACK_SCINAPSE_FEEDBACK_WEBHOOK_URL =
+  process.env.SLACK_SCINAPSE_FEEDBACK_WEBHOOK_URL;
+const GOOGLE_SHEET_CLIENT_EMAIL = process.env.GOOGLE_SHEET_CLIENT_EMAIL;
+const GOOGLE_SHEET_PRIVATE_KEY = process.env.GOOGLE_SHEET_PRIVATE_KEY;
+const SPREAD_SHEET_ID = "14jL4Lw56018fbcBPMsQCe2wSULW05EMDEmheLElnI90";
+const SCOPES = ["https://www.googleapis.com/auth/spreadsheets"];
+
+function mapResource(str: string | undefined | null): string {
+  if (typeof str === "string") {
+    return str;
+  } else {
+    return "N/A";
+  }
+}
 
 // POST https://qg6wp4ze48.execute-api.us-east-1.amazonaws.com/prod/feedbacks/new
 export async function handleFeedback(event, context, callback) {
-  console.log(event);
-
-  const SLACK_SCINAPSE_FEEDBACK_WEBHOOK_URL =
-    process.env.SLACK_SCINAPSE_FEEDBACK_WEBHOOK_URL;
-  const GOOGLE_SHEET_CLIENT_EMAIL = process.env.GOOGLE_SHEET_CLIENT_EMAIL;
-  const GOOGLE_SHEET_PRIVATE_KEY = process.env.GOOGLE_SHEET_PRIVATE_KEY;
-  const SPREAD_SHEET_ID = "14jL4Lw56018fbcBPMsQCe2wSULW05EMDEmheLElnI90";
-  let token;
+  if (!event.body) {
+    throw new Error("Feedback is missing.");
+  }
 
   if (!SLACK_SCINAPSE_FEEDBACK_WEBHOOK_URL) {
     throw new Error("SLACK TOKEN is missing");
@@ -28,7 +39,9 @@ export async function handleFeedback(event, context, callback) {
     console.error(err);
   }
 
-  const SCOPES = ["https://www.googleapis.com/auth/spreadsheets"];
+  console.log(event.body);
+
+  const feedbackTicket: FeedbackTicket = JSON.parse(event.body);
 
   const jwtClient = new JWT({
     email: GOOGLE_SHEET_CLIENT_EMAIL,
@@ -42,14 +55,19 @@ export async function handleFeedback(event, context, callback) {
         console.error(err);
         reject();
       }
-      console.log(t);
-      token = t;
       resolve();
     });
   });
 
   const resource = {
-    values: [[1, 123, "TEST", Date.now()]]
+    values: [
+      [
+        mapResource(feedbackTicket.userId),
+        mapResource(feedbackTicket.gaId),
+        mapResource(feedbackTicket.content),
+        Date.now()
+      ]
+    ]
   };
 
   const sheets = google.sheets({ version: "v4", jwtClient });
@@ -73,7 +91,7 @@ export async function handleFeedback(event, context, callback) {
   const response = {
     statusCode: 200,
     body: JSON.stringify({
-      event
+      success: true
     })
   };
 
