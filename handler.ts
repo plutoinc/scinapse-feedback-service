@@ -39,8 +39,6 @@ export async function handleFeedback(event, context, callback) {
     console.error(err);
   }
 
-  console.log(event.body);
-
   const feedbackTicket: FeedbackTicket = JSON.parse(event.body);
 
   const jwtClient = new JWT({
@@ -91,6 +89,7 @@ export async function handleFeedback(event, context, callback) {
   const response = {
     statusCode: 200,
     body: JSON.stringify({
+      "Access-Control-Allow-Origin": "*",
       success: true
     })
   };
