@@ -31,15 +31,16 @@ export async function handleFeedback(event, context, callback) {
     throw new Error("SLACK TOKEN is missing");
   }
 
+  const feedbackTicket: FeedbackTicket = JSON.parse(event.body);
+
   try {
     await axios.post(SLACK_SCINAPSE_FEEDBACK_WEBHOOK_URL, {
-      text: "TEST"
+      text: feedbackTicket.content,
     });
   } catch (err) {
     console.error(err);
   }
 
-  const feedbackTicket: FeedbackTicket = JSON.parse(event.body);
 
   const jwtClient = new JWT({
     email: GOOGLE_SHEET_CLIENT_EMAIL,
