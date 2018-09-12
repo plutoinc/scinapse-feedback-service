@@ -80,7 +80,6 @@ export async function handleFeedback(event, context, callback) {
 
   sheets.spreadsheets.values.append(request, (err, result) => {
     if (err) {
-      console.log("ERROR AT APPENDING");
       console.error(err);
     } else {
       console.log(result);
@@ -89,8 +88,10 @@ export async function handleFeedback(event, context, callback) {
 
   const response = {
     statusCode: 200,
+    headers: {
+      "Access-Control-Allow-Origin": "*"
+    },
     body: JSON.stringify({
-      "Access-Control-Allow-Origin": "*",
       success: true
     })
   };
