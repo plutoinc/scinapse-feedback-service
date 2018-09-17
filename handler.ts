@@ -64,7 +64,8 @@ export async function handleFeedback(event, context, callback) {
         mapResource(feedbackTicket.gaId),
         mapResource(feedbackTicket.content),
         Date.now(),
-        mapResource(feedbackTicket.email)
+        mapResource(feedbackTicket.email),
+        mapResource(feedbackTicket.referer)
       ]
     ]
   };
