@@ -1,9 +1,6 @@
 import axios from "axios";
-import * as http from "http";
 import { google } from "googleapis";
 import { JWT } from "google-auth-library";
-import { rejects } from "assert";
-import { resolve } from "path";
 import { FeedbackTicket } from "@pluto_network/scinapse-feedback";
 
 const SLACK_SCINAPSE_FEEDBACK_WEBHOOK_URL =
@@ -33,9 +30,14 @@ export async function handleFeedback(event, context, callback) {
 
   const feedbackTicket: FeedbackTicket = JSON.parse(event.body);
 
+  let slackMessage = feedbackTicket.content;
+  if (feedbackTicket.email) {
+    slackMessage = `${feedbackTicket.email} - ${feedbackTicket.content}`;
+  }
+
   try {
     await axios.post(SLACK_SCINAPSE_FEEDBACK_WEBHOOK_URL, {
-      text: feedbackTicket.content
+      text: slackMessage
     });
   } catch (err) {
     console.error(err);
