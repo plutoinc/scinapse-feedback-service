@@ -1,0 +1,9 @@
+export const SLACK_SCINAPSE_FEEDBACK_WEBHOOK_URL =
+  process.env.SLACK_SCINAPSE_FEEDBACK_WEBHOOK_URL;
+export const GOOGLE_SHEET_CLIENT_EMAIL = process.env.GOOGLE_SHEET_CLIENT_EMAIL;
+export const GOOGLE_SHEET_PRIVATE_KEY = process.env.GOOGLE_SHEET_PRIVATE_KEY;
+export const FRESHDESK_PRIVATE_API_KEY = process.env.FRESHDESK_PRIVATE_API_KEY;
+export const FRESHDESK_SCINAPSE_WEBHOOK_URL =
+  process.env.FRESHDESK_SCINAPSE_WEBHOOK_URL;
+export const SPREAD_SHEET_ID = "14jL4Lw56018fbcBPMsQCe2wSULW05EMDEmheLElnI90";
+export const SCOPES = ["https://www.googleapis.com/auth/spreadsheets"];

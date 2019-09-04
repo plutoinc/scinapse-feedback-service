@@ -2,13 +2,15 @@ import axios from "axios";
 import { google } from "googleapis";
 import { JWT } from "google-auth-library";
 import { FeedbackTicket } from "@pluto_network/scinapse-feedback";
-
-const SLACK_SCINAPSE_FEEDBACK_WEBHOOK_URL =
-  process.env.SLACK_SCINAPSE_FEEDBACK_WEBHOOK_URL;
-const GOOGLE_SHEET_CLIENT_EMAIL = process.env.GOOGLE_SHEET_CLIENT_EMAIL;
-const GOOGLE_SHEET_PRIVATE_KEY = process.env.GOOGLE_SHEET_PRIVATE_KEY;
-const SPREAD_SHEET_ID = "14jL4Lw56018fbcBPMsQCe2wSULW05EMDEmheLElnI90";
-const SCOPES = ["https://www.googleapis.com/auth/spreadsheets"];
+import {
+  SLACK_SCINAPSE_FEEDBACK_WEBHOOK_URL,
+  GOOGLE_SHEET_CLIENT_EMAIL,
+  GOOGLE_SHEET_PRIVATE_KEY,
+  SCOPES,
+  SPREAD_SHEET_ID,
+  FRESHDESK_SCINAPSE_WEBHOOK_URL,
+  FRESHDESK_PRIVATE_API_KEY
+} from "./accessKeys";
 
 function mapResource(str: string | undefined | null): string {
   if (typeof str === "string") {
@@ -88,6 +90,42 @@ export async function handleFeedback(event, context, callback) {
       console.log(result);
     }
   });
+
+  const response = {
+    statusCode: 200,
+    headers: {
+      "Access-Control-Allow-Origin": "*"
+    },
+    body: JSON.stringify({
+      success: true
+    })
+  };
+
+  callback(null, response);
+}
+
+// POST https://qg6wp4ze48.execute-api.us-east-1.amazonaws.com/prod/ticket/new
+export async function handleSendTicketToFreshDesk(event, context, callback) {
+  if (!event.body) {
+    throw new Error("Feedback is missing.");
+  }
+
+  if (!FRESHDESK_SCINAPSE_WEBHOOK_URL || !FRESHDESK_PRIVATE_API_KEY) {
+    throw new Error("FRESHDESK TOKEN is missing");
+  }
+
+  const feedbackTicket: FeedbackTicket = JSON.parse(event.body);
+
+  try {
+    await axios.post(FRESHDESK_SCINAPSE_WEBHOOK_URL, feedbackTicket, {
+      auth: {
+        username: FRESHDESK_PRIVATE_API_KEY,
+        password: "X"
+      }
+    });
+  } catch (err) {
+    console.error(err);
+  }
 
   const response = {
     statusCode: 200,

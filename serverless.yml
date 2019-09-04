@@ -12,6 +12,8 @@ provider:
     SLACK_SCINAPSE_FEEDBACK_WEBHOOK_URL: ${env:SLACK_SCINAPSE_FEEDBACK_WEBHOOK_URL}
     GOOGLE_SHEET_CLIENT_EMAIL: ${env:GOOGLE_SHEET_CLIENT_EMAIL}
     GOOGLE_SHEET_PRIVATE_KEY: ${env:GOOGLE_SHEET_PRIVATE_KEY}
+    FRESHDESK_PRIVATE_API_KEY: ${env:FRESHDESK_PRIVATE_API_KEY}
+    FRESHDESK_SCINAPSE_WEBHOOK_URL: ${env:FRESHDESK_SCINAPSE_WEBHOOK_URL}
 
 functions:
   handleFeedback:
@@ -19,5 +21,12 @@ functions:
     events:
       - http:
           path: feedbacks/new
+          method: post
+          cors: true
+  handleSendTicketToFreshDesk:
+    handler: handler.handleSendTicketToFreshDesk
+    events:
+      - http:
+          path: ticket/new
           method: post
           cors: true
