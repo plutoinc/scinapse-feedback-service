@@ -1,7 +1,10 @@
 import axios from "axios";
 import { google } from "googleapis";
 import { JWT } from "google-auth-library";
-import { FeedbackTicket } from "@pluto_network/scinapse-feedback";
+import {
+  FeedbackTicket,
+  FreshdeskTicket
+} from "@pluto_network/scinapse-feedback";
 import {
   SLACK_SCINAPSE_FEEDBACK_WEBHOOK_URL,
   GOOGLE_SHEET_CLIENT_EMAIL,
@@ -114,7 +117,7 @@ export async function handleSendTicketToFreshDesk(event, context, callback) {
     throw new Error("FRESHDESK TOKEN is missing");
   }
 
-  const feedbackTicket: FeedbackTicket = JSON.parse(event.body);
+  const feedbackTicket: FreshdeskTicket = JSON.parse(event.body);
 
   try {
     await axios.post(FRESHDESK_SCINAPSE_WEBHOOK_URL, feedbackTicket, {
