@@ -126,10 +126,9 @@ export async function handleSendTicketToFreshDesk(event, context, callback) {
   }
 
   try {
-    !!feedbackTicket.shouldAlertSlack &&
-      (await axios.post(SLACK_SCINAPSE_FEEDBACK_WEBHOOK_URL, {
-        text: slackMessage
-      }));
+    await axios.post(SLACK_SCINAPSE_FEEDBACK_WEBHOOK_URL, {
+      text: slackMessage
+    });
   } catch (err) {
     console.error(err);
   }
