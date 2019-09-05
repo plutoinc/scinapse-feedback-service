@@ -113,11 +113,29 @@ export async function handleSendTicketToFreshDesk(event, context, callback) {
     throw new Error("Feedback is missing.");
   }
 
+  const feedbackTicket: FreshdeskTicket = JSON.parse(event.body);
+
+  if (!SLACK_SCINAPSE_FEEDBACK_WEBHOOK_URL) {
+    throw new Error("SLACK TOKEN is missing");
+  }
+
+  let slackMessage = feedbackTicket.description;
+
+  if (feedbackTicket.email) {
+    slackMessage = `${feedbackTicket.email} - ${feedbackTicket.description}`;
+  }
+
+  try {
+    await axios.post(SLACK_SCINAPSE_FEEDBACK_WEBHOOK_URL, {
+      text: slackMessage
+    });
+  } catch (err) {
+    console.error(err);
+  }
+
   if (!FRESHDESK_SCINAPSE_WEBHOOK_URL || !FRESHDESK_PRIVATE_API_KEY) {
     throw new Error("FRESHDESK TOKEN is missing");
   }
-
-  const feedbackTicket: FreshdeskTicket = JSON.parse(event.body);
 
   try {
     await axios.post(FRESHDESK_SCINAPSE_WEBHOOK_URL, feedbackTicket, {
