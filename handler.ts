@@ -3,7 +3,7 @@ import { google } from "googleapis";
 import { JWT } from "google-auth-library";
 import {
   FeedbackTicket,
-  FreshdeskTicket
+  FreshdeskTicket,
 } from "@pluto_network/scinapse-feedback";
 import {
   SLACK_SCINAPSE_FEEDBACK_WEBHOOK_URL,
@@ -12,7 +12,7 @@ import {
   SCOPES,
   SPREAD_SHEET_ID,
   FRESHDESK_SCINAPSE_WEBHOOK_URL,
-  FRESHDESK_PRIVATE_API_KEY
+  FRESHDESK_PRIVATE_API_KEY,
 } from "./accessKeys";
 
 function mapResource(str: string | undefined | null): string {
@@ -42,7 +42,7 @@ export async function handleFeedback(event, context, callback) {
 
   try {
     await axios.post(SLACK_SCINAPSE_FEEDBACK_WEBHOOK_URL, {
-      text: slackMessage
+      text: slackMessage,
     });
   } catch (err) {
     console.error(err);
@@ -51,7 +51,7 @@ export async function handleFeedback(event, context, callback) {
   const jwtClient = new JWT({
     email: GOOGLE_SHEET_CLIENT_EMAIL,
     key: GOOGLE_SHEET_PRIVATE_KEY!.replace(/\\n/g, "\n").replace(/\u003d/, "="),
-    scopes: SCOPES
+    scopes: SCOPES,
   });
 
   await new Promise((resolve, reject) => {
@@ -72,9 +72,9 @@ export async function handleFeedback(event, context, callback) {
         mapResource(feedbackTicket.content),
         Date.now(),
         mapResource(feedbackTicket.email),
-        mapResource(feedbackTicket.referer)
-      ]
-    ]
+        mapResource(feedbackTicket.referer),
+      ],
+    ],
   };
 
   const sheets = google.sheets({ version: "v4", jwtClient });
@@ -83,7 +83,7 @@ export async function handleFeedback(event, context, callback) {
     range: "Sheet1",
     valueInputOption: "RAW",
     resource,
-    auth: jwtClient
+    auth: jwtClient,
   };
 
   sheets.spreadsheets.values.append(request, (err, result) => {
@@ -97,11 +97,12 @@ export async function handleFeedback(event, context, callback) {
   const response = {
     statusCode: 200,
     headers: {
-      "Access-Control-Allow-Origin": "*"
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Credentials": true,
     },
     body: JSON.stringify({
-      success: true
-    })
+      success: true,
+    }),
   };
 
   callback(null, response);
@@ -127,7 +128,7 @@ export async function handleSendTicketToFreshDesk(event, context, callback) {
 
   try {
     await axios.post(SLACK_SCINAPSE_FEEDBACK_WEBHOOK_URL, {
-      text: slackMessage
+      text: slackMessage,
     });
   } catch (err) {
     console.error(err);
@@ -141,8 +142,8 @@ export async function handleSendTicketToFreshDesk(event, context, callback) {
     await axios.post(FRESHDESK_SCINAPSE_WEBHOOK_URL, feedbackTicket, {
       auth: {
         username: FRESHDESK_PRIVATE_API_KEY,
-        password: "X"
-      }
+        password: "X",
+      },
     });
   } catch (err) {
     console.error(err);
@@ -151,11 +152,12 @@ export async function handleSendTicketToFreshDesk(event, context, callback) {
   const response = {
     statusCode: 200,
     headers: {
-      "Access-Control-Allow-Origin": "*"
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Credentials": true,
     },
     body: JSON.stringify({
-      success: true
-    })
+      success: true,
+    }),
   };
 
   callback(null, response);
